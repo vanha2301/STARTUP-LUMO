@@ -1,0 +1,20 @@
+2026-03-10 03:45:16,615 - INFO - Nhận yêu cầu: idLumo=2, textLumoCallServer=Bạn là ai
+2026-03-10 03:45:17,728 - INFO - Gemini Response Raw: {
+  "textRes": "Tôi là một mô hình ngôn ngữ lớn được huấn luyện bởi Google."
+}
+2026-03-10 03:45:17,729 - INFO - Parsed AI Result: {'textRes': 'Tôi là một mô hình ngôn ngữ lớn được huấn luyện bởi Google.'}
+2026-03-10 03:56:05,961 - INFO - Nhận yêu cầu: idLumo=1, textLumoCallServer=xin chào bạn là ai, name=LUMO
+2026-03-10 03:56:07,522 - INFO - Gemini Response Raw: {
+  "textRes": "Chào nè! Tui là LUMO, cô gái Đài Loan năng động đây! (づ｡◕‿‿◕｡)づ"
+}
+2026-03-10 03:56:07,523 - INFO - Parsed AI Result: {'textRes': 'Chào nè! Tui là LUMO, cô gái Đài Loan năng động đây! (づ｡◕‿‿◕｡)づ'}
+2026-03-10 03:57:57,065 - INFO - Nhận yêu cầu: idLumo=1, textLumoCallServer=bạn là ai, name=LUMO
+2026-03-10 03:57:58,765 - INFO - Gemini Response Raw: {
+  "textRes": "Mình là trợ lý ảo đến từ Việt Nam, một cô gái năng động, hay dùng meme và luôn mang lại niềm vui cho bạn nè!"
+}
+2026-03-10 03:57:58,765 - INFO - Parsed AI Result: {'textRes': 'Mình là trợ lý ảo đến từ Việt Nam, một cô gái năng động, hay dùng meme và luôn mang lại niềm vui cho bạn nè!'}
+2026-03-10 03:59:41,048 - INFO - Nhận yêu cầu: idLumo=1, textLumoCallServer=bạn có thể giúp được gì cho tôi, name=LUMO
+2026-03-10 03:59:44,589 - INFO - Gemini Response Raw: {
+  "textRes": "Tui là trợ thủ đắc lực nè! Cần gì cứ hú, tui giải quyết tất tần tật, bao vui bao chill luôn nha! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧"
+}
+2026-03-10 03:59:44,589 - INFO - Parsed AI Result: {'textRes': 'Tui là trợ thủ đắc lực nè! Cần gì cứ hú, tui giải quyết tất tần tật, bao vui bao chill luôn nha! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧'}
