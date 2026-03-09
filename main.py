@@ -8,7 +8,7 @@ async def root():
         "status": "Success",
         "message": "Server Lumo running, create by Ha V. Tran (Tyranno)",
         "project": "Lumo Hub - STARTUP CHALLENGE 2026",
-        "author": "Ha V. Tran (Tyranno)"
+        "author": "Ha V. Tran (Tyranno)  "
     }
 
 if __name__ == "__main__":
