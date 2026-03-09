@@ -1,6 +1,5 @@
-pandas
 fastapi
 uvicorn
-requests
-logging
-dotenv
+sqlmodel
+python-dotenv
+google-generativeai
