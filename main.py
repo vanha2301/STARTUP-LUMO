@@ -5,6 +5,7 @@ from logging.handlers import TimedRotatingFileHandler
 from fastapi import FastAPI, Request, Query
 from dotenv import load_dotenv
 import google.generativeai as genai
+import re
 
 load_dotenv()
 
@@ -25,6 +26,38 @@ model = genai.GenerativeModel(
     'models/gemini-3.1-flash-lite-preview',
     generation_config={"response_mime_type": "application/json"}
 )
+
+def get_lumo_history_string(file_path, limit=20):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            log_data = f.read()
+
+        # 1. Trích xuất tất cả câu hỏi của User
+        user_queries = re.findall(r"textLumoCallServer=(.*?), name", log_data)
+        
+        # 2. Trích xuất tất cả phản hồi từ Parsed AI Result
+        llm_responses = re.findall(r"Parsed AI Result: \{['\"]textRes['\"]: ['\"](.*?)['\"]\}", log_data)
+
+        # 3. Kết hợp và lấy 20 cặp cuối cùng
+        history = list(zip(user_queries, llm_responses))
+        latest_history = history[-limit:]
+
+        if not latest_history:
+            return ""
+
+        # 4. Gom tất cả thành một chuỗi duy nhất
+        history_lines = []
+        for user, llm in latest_history:
+            history_lines.append(f"user: {user}")
+            history_lines.append(f"LLM: {llm}")
+        
+        # Trả về chuỗi các cặp hội thoại cách nhau bởi dấu xuống dòng
+        return "\n".join(history_lines)
+
+    except FileNotFoundError:
+        return f"Error: File {file_path} not found."
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 @app.get("/ota")
 async def make_prediction(
@@ -68,7 +101,9 @@ async def make_prediction(
     - Thử nghiệm và điều chỉnh cách sử dụng meme, từ ngữ để phù hợp với từng đối tượng người dùng.
     - Rút kinh nghiệm từ phản hồi của người dùng, cải thiện khả năng hiểu và đáp ứng nhu cầu của họ.
     - Liên tục cập nhật kiến thức, xu hướng mới để giữ cho nội dung trò chuyện luôn hấp dẫn và mới mẻ.
-    """
+
+    Bạn phải dựa vào lịch xử chat mà trả lời nhé
+    """ + get_lumo_history_string("system.log", limit=50)
 
     try:
         # 2. Gọi Gemini và log phản hồi thô

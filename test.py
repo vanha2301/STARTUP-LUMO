@@ -1,33 +1,40 @@
-import requests
+import re
 
-# 1. Cấu hình URL và tham số
-BASE_URL = "https://lumo.vanha2301.online/ota"
-
-# Đây là các tham số Hà muốn truyền vào dấu ? sau URL
-params = {
-    "idLumo": 1,
-    "textLumoCallServer": "bạn là ai vậy",
-    "assistant_name": "LUMO"
-}
-
-def test_lumo_api():
-    print(f"🚀 Đang gửi yêu cầu tới: {BASE_URL}...")
-    
+def get_lumo_history_string(file_path, limit=20):
     try:
-        # 2. Gửi yêu cầu GET với params
-        # requests sẽ tự biến thành: /ota?idLumo=1&textLumoCallServer=b%E1%BA%A1n...
-        response = requests.get(BASE_URL, params=params, timeout=10)
+        with open(file_path, 'r', encoding='utf-8') as f:
+            log_data = f.read()
 
-        # 3. Kiểm tra mã trạng thái (200 là OK)
-        if response.status_code == 200:
-            print("✅ Kết quả từ Gemini:")
-            print(response.json()) # In ra kết quả JSON nhận được
-        else:
-            print(f"❌ Lỗi: {response.status_code}")
-            print(response.text)
+        # 1. Trích xuất tất cả câu hỏi của User
+        user_queries = re.findall(r"textLumoCallServer=(.*?), name", log_data)
+        
+        # 2. Trích xuất tất cả phản hồi từ Parsed AI Result
+        llm_responses = re.findall(r"Parsed AI Result: \{['\"]textRes['\"]: ['\"](.*?)['\"]\}", log_data)
 
+        # 3. Kết hợp và lấy 20 cặp cuối cùng
+        history = list(zip(user_queries, llm_responses))
+        latest_history = history[-limit:]
+
+        if not latest_history:
+            return ""
+
+        # 4. Gom tất cả thành một chuỗi duy nhất
+        history_lines = []
+        for user, llm in latest_history:
+            history_lines.append(f"user: {user}")
+            history_lines.append(f"LLM: {llm}")
+        
+        # Trả về chuỗi các cặp hội thoại cách nhau bởi dấu xuống dòng
+        return "\n".join(history_lines)
+
+    except FileNotFoundError:
+        return f"Error: File {file_path} not found."
     except Exception as e:
-        print(f"💥 Đã xảy ra lỗi khi kết nối: {str(e)}")
+        return f"Error: {str(e)}"
 
-if __name__ == "__main__":
-    test_lumo_api()
+# --- CÁCH SỬ DỤNG ---
+
+# Bây giờ bạn có thể cộng vào prompt của mình
+system_prompt = "Bạn là trợ lý ảo LUMO. Dưới đây là lịch sử trò chuyện gần đây:\n" + get_lumo_history_string("system.log", limit=20)
+
+print(system_prompt)
